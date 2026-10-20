@@ -6,9 +6,9 @@ local goblinConfig = {
   lookType = 58,
   groupId = "goblins",
 
-  speed = 350,
+  speed = 360,
   healthFactor = 1,
-  weakFromPower = 680,
+  weakFromPower = 700,
 
   colorMapBaseName = "goblin",
   randomColorMapChance = 70,
@@ -24,6 +24,7 @@ local goblinConfig = {
   },
 
   attacks = {
+    { target = true, cooldown = 2000, chance = 100, subname = "basic", range = 1, script = "goblins/goblin_knife_basic.lua", attackPercent = 30 },
     { target = true, cooldown = 2000, chance = 100, subname = "basic", range = 1, script = "goblins/goblin_knife_basic.lua", attackPercent = 30 },
     { target = true, cooldown = 4000, chance = 50, subname = "special", range = 1, script = "goblins/goblin_knife_special.lua", attackPercent = 30 }
   }
