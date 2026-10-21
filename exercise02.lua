@@ -4,7 +4,7 @@ local defenseValue = 15
 for i = 1, 5 do
   local attack = math.random(10, 30)
 
-  if attack >= 20 then
+  if attack > 20 then
     print("Critical Damage!")
   end
 
