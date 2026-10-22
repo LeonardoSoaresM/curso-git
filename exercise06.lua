@@ -15,3 +15,11 @@ local function validation(name, age)
   return true
 end
 
+local function addUser(name, age)
+  if validation(name, age) then
+    table.insert(users, {name = name, age = age})
+    print("User added successfully.")
+  else
+    print("Failed to add user.")
+  end
+end
