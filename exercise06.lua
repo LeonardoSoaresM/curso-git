@@ -23,3 +23,11 @@ local function addUser(name, age)
     print("Failed to add user.")
   end
 end
+
+local function listUsers()
+  print("List of users:")
+  for i, user in ipairs(users) do
+    print(i .. " - Nome: " .. user.name .. " - Idade: " .. user.age)
+  end
+end
+
