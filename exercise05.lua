@@ -1,10 +1,10 @@
-matrix = {
+local matrix = {
   {".", ".", "."},
   {".", ".", "."},
   {".", ".", "."}
 }
 
-player = {
+local player = {
   name = "Leonardo",
   x = 2,
   y = 2
