@@ -12,12 +12,16 @@ local player = {
 
 matrix[player.x][player.y] = "P"
 
-for xI = 1, #matrix do
-  for yI = 1, #matrix[xI] do
-    io.write(matrix[xI][yI] .. " ")
+local function printMatrix(m)
+  for xI = 1, #m do
+    for yI = 1, #m[xI] do
+      io.write(m[xI][yI] .. " ")
+    end
+    print()
   end
-  print()
 end
+
+printMatrix(matrix)
 
 print("Insert Player position (x y): ")
 matrix[player.x][player.y] = "."
@@ -27,9 +31,4 @@ player.y = y
 matrix[player.x][player.y] = "P"
 
 print("New map: ")
-for xI = 1, #matrix do
-  for yI = 1, #matrix[xI] do
-    io.write(matrix[xI][yI] .. " ")
-  end
-  print()
-end
+printMatrix(matrix)
