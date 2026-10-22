@@ -31,3 +31,11 @@ local function listUsers()
   end
 end
 
+local function removeUser(index)
+  if index < 1 or index > #users then
+    print("Error: invalid index.")
+    return
+  end
+  table.remove(users, index)
+  print("User removed successfully.")
+end
