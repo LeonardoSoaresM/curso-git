@@ -54,10 +54,19 @@ local function validatePositionInBattlefield(position, battlefield)
   return false
 end
 
-local function npcAttack(battlefield)
+local function npcAttack(playerShipsPositions, battlefield)
   local attackPosition = randomPosition(battlefield)
-  print("Ataque feito na posição: " .. attackPosition)
-  return attackPosition
+  print("Ataque do NPC feito na posição: " .. attackPosition)
+
+  for i, shipPosition in ipairs(playerShipsPositions) do
+    if shipPosition == attackPosition then
+      print("O NPC acertou.")
+      return true
+    end
+  end
+
+  print("O NPC errrou")
+  return false
 end
 
 local function findCoordinate(battlefield, coordinate)
@@ -78,6 +87,7 @@ local function playerAttack(coordinate, npcShipsPositions)
     return false
   end
 end
+
 
 local c = true
 while c == true do
@@ -104,5 +114,6 @@ while c == true do
       end
   end
   print(playerShipsPositions[2])
+  npcAttack(playerShipsPositions, playerBattlefield)
   c = false
 end
