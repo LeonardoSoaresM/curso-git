@@ -39,6 +39,11 @@ local function createShipsNPC(npcShipsPositions, npcBattlefield, amount)
 end
 
 local function validatePositionInBattlefield(position, battlefield)
+  if type(position) ~= "string" or not string.match(position, "^[A-Z]%d+$") then
+        print("Formato inválido! Use algo como A1, B2, etc.")
+        return false
+    end
+
   for i = 1, #battlefield do
     for j = 1, #battlefield[i] do
       if battlefield[i][j] == position then
@@ -74,46 +79,30 @@ local function playerAttack(coordinate, npcShipsPositions)
   end
 end
 
+local c = true
+while c == true do
+  playerBattlefield = createBattlefield(sizeBattlefield)
+  npcBattlefield = createBattlefield(sizeBattlefield)
 
+  print("Campo do Jogador: ")
+  showBattlefield(playerBattlefield)
+  print("Campo do NPC: ")
+  showBattlefield(npcBattlefield)
+  print()
 
---playerBattlefield = createBattlefield(sizeBattlefield)
---npcBattlefield = createBattlefield(sizeBattlefield)
---print("Campo do Jogador: ")
---showBattlefield(playerBattlefield)
---print("Campo do NPC: ")
---showBattlefield(npcBattlefield)
---print()
---npcShipsPositions[1] = "A1"
---playerAttack("A1", npcShipsPositions)
---playerAttack("A1", npcShipsPositions)
---playerAttack("A3", npcShipsPositions)
+  local shipIndex = 1
+  while shipIndex <= 3 do
+      print("Navio " .. shipIndex .. "/3: Insira qual a posição você deseja colocar seu barco (Ex: A1, B2, D7):")
 
+      local input_position = io.read()
 
-
-
---
---while true do
---  playerBattlefield = createBattlefield(sizeBattlefield)
---  npcBattlefield = createBattlefield(sizeBattlefield)
---  local i = true
---  while i do
---    print("Digite a posição do navio (ex: A1, B3):")
---    local position = io.read()
---    if position == "sair" then
---      break
---    end
---    local validPosition = validatePositionShip(position, playerBattlefield)
---
---    if validPosition then
---      table.insert(playerShipsPositions, position)
---      print("Navio adicionado na posição: " .. position)
---    else
---      print("Posição inválida. Tente novamente.")
---    end
---
---    if #playerShipsPositions >= 5 then
---      print("Você adicionou o número máximo de navios.")
---      break
---    end
---  end
---end
+      if validatePositionInBattlefield(input_position, playerBattlefield) then
+          playerShipsPositions[shipIndex] = input_position
+          shipIndex = shipIndex + 1
+      else
+          print("Posição inválida ou fora do mapa! Tente novamente.")
+      end
+  end
+  print(playerShipsPositions[2])
+  c = false
+end
