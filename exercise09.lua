@@ -29,7 +29,10 @@ end
 local function randomPosition(battlefield)
   local row = math.random(1, #battlefield)
   local col = math.random(1, #battlefield[row])
-  return battlefield[row][col]
+
+  local letter = string.char(64 + row)
+
+  return letter .. col
 end
 
 local function findCoordinate(battlefield, coordinate)
@@ -68,7 +71,7 @@ end
 
 local function attackShip(coordinate, npcShipsPositions)
   if findCoordinate(npcShipsPositions, coordinate) then
-    print("Acertou.")
+    print("Acertou um navio.")
     return true
   else
     print("Errou.")
@@ -101,6 +104,18 @@ local function playerAddShips(shipsPosition)
   end
 end
 
+local function updateBattlefieldMarker(battlefield, coordinate, marker)
+  for i = 1, #battlefield do
+    for j = 1, #battlefield[i] do
+      if battlefield[i][j] == coordinate then
+        battlefield[i][j] = marker
+        return true
+      end
+    end
+  end
+  return false
+end
+
 playerBattlefield = createBattlefield(sizeBattlefield)
 npcBattlefield = createBattlefield(sizeBattlefield)
 createShipsNPC(npcShipsPositions, npcBattlefield, totalShips)
@@ -131,6 +146,7 @@ while true do
     end
   end
   if attackShip(attackCoordinate, npcShipsPositions) then
+    updateBattlefieldMarker(npcBattlefield, attackCoordinate, "XX")
     for i, ship in ipairs(npcShipsPositions) do
       if ship == attackCoordinate then
         table.remove(npcShipsPositions, i)
@@ -138,38 +154,52 @@ while true do
         break
       end
     end
+  else
+    updateBattlefieldMarker(npcBattlefield, attackCoordinate, "00")
   end
 
-  print()
-  local npcAttack = randomPosition(playerBattlefield)
-  print("O npc atacou na posição: " .. npcAttack)
+  if #npcShipsPositions == 0 then
+    print("Você venceu Parabéns!!\n")
+    showBattlefield(npcBattlefield)
+    break
+  end
+
+  local npcAttack
+  while true do
+    npcAttack = randomPosition(playerBattlefield)
+
+    if validatePositionInBattlefield(npcAttack, playerBattlefield) then
+      break
+    end
+  end
+
+  print("\nO npc atacou na posição: " .. npcAttack)
   os.execute("sleep 2")
   if attackShip(npcAttack, playerShipsPositions) then
+    updateBattlefieldMarker(playerBattlefield, npcAttack, "XX")
     for i, ship in ipairs(playerShipsPositions) do
       if ship == npcAttack then
         table.remove(playerShipsPositions, i)
         break
       end
     end
+  else
+    updateBattlefieldMarker(playerBattlefield, npcAttack, "00")
+  end
+
+  if #playerShipsPositions == 0 then
+    print("Você perdeu.\n")
+    showBattlefield(playerBattlefield)
+    break
   end
 
   os.execute("sleep 2")
-  print()
+  print("\nCampos de batalha(X = navio afundado, O = tiro na água): \n")
   print("Vidas do jogador :".. #playerShipsPositions .."/" .. totalShips .. "\nCampo do Jogador: ")
   showBattlefield(playerBattlefield)
-  print("Vidas do NPC : ".. #npcShipsPositions .."/" .. totalShips .. "\nCampo do Jogador: ")
+  print("\nVidas do NPC : ".. #npcShipsPositions .."/" .. totalShips .. "\nCampo do NPC: ")
   showBattlefield(npcBattlefield)
   print()
-
-  if #playerShipsPositions == 0 then
-    print("Você perdeu.")
-    break
-  end
-
-  if #npcShipsPositions == 0 then
-    print("Você venceu Parabéns!!")
-    break
-  end
 
   print("Aperter enter para continuar.")
   io.read()
