@@ -110,8 +110,8 @@ for i = 1, totalShips do
   table.insert(playerShipsPositions, playerAddShips(playerShipsPositions))
 end
 
+os.execute("clear")
 while true do
-  os.execute(clear)
   print("Campo do Jogador: ")
   showBattlefield(playerBattlefield)
   print("Campo do NPC: ")
@@ -121,27 +121,29 @@ while true do
   local attackCoordinate
   while true do
     print("Realize seu ataque ao inimigo, informe a posição(Ex: A1,B2,C2,)")
-    attackCoordinate = io.read("*l")
+    attackCoordinate = io.read()
 
     if validatePositionInBattlefield(attackCoordinate, npcBattlefield) then
+      os.execute("clear")
+      print("Você atacou na posição: " .. attackCoordinate)
+      os.execute("sleep 2")
       break
     end
   end
-
   if attackShip(attackCoordinate, npcShipsPositions) then
     for i, ship in ipairs(npcShipsPositions) do
       if ship == attackCoordinate then
         table.remove(npcShipsPositions, i)
+        os.execute("sleep 2")
         break
       end
     end
   end
 
+  print()
   local npcAttack = randomPosition(playerBattlefield)
-  print("Atacou na posição: " .. npcAttack)
-  for i, ship in ipairs(playerShipsPositions) do
-      print("Posição barco do jogador: " .. playerShipsPositions[i])
-    end
+  print("O npc atacou na posição: " .. npcAttack)
+  os.execute("sleep 2")
   if attackShip(npcAttack, playerShipsPositions) then
     for i, ship in ipairs(playerShipsPositions) do
       if ship == npcAttack then
@@ -150,6 +152,14 @@ while true do
       end
     end
   end
+
+  os.execute("sleep 2")
+  print()
+  print("Vidas do jogador :".. #playerShipsPositions .."/" .. totalShips .. "\nCampo do Jogador: ")
+  showBattlefield(playerBattlefield)
+  print("Vidas do NPC : ".. #npcShipsPositions .."/" .. totalShips .. "\nCampo do Jogador: ")
+  showBattlefield(npcBattlefield)
+  print()
 
   if #playerShipsPositions == 0 then
     print("Você perdeu.")
@@ -163,4 +173,5 @@ while true do
 
   print("Aperter enter para continuar.")
   io.read()
+  os.execute("clear")
 end
