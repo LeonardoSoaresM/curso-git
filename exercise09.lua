@@ -28,17 +28,15 @@ end
 
 local function getRandomPosition(battlefield)
   local row = math.random(1, #battlefield)
-  local col = math.random(1, #battlefield[row])
-
+  local number = math.random(1, #battlefield[row])
   local letter = string.char(64 + row)
-
-  return letter .. col
+  return letter .. number
 end
 
 local function findCoordinate(shipsList, coordinate)
   for i, targetCoordinate in ipairs(shipsList) do
     if targetCoordinate == coordinate then
-        return true
+      return true
     end
   end
   return false
@@ -47,7 +45,7 @@ end
 local function addNpcShips(npcShipsPositions, npcBattlefield, amount)
   while #npcShipsPositions < amount do
     local position = getRandomPosition(npcBattlefield)
-    if findCoordinate(npcShipsPositions, position) == false then
+    if not findCoordinate(npcShipsPositions, position) then
       table.insert(npcShipsPositions, position)
     end
   end
@@ -55,9 +53,9 @@ end
 
 local function validatePositionInBattlefield(position, battlefield)
   if type(position) ~= "string" or not string.match(position, "^[A-Z]%d+$") then
-        print("Invalid format! Use a coordinate like A1 or B2.")
-        return false
-    end
+    print("Invalid format! Use a coordinate like A1 or B2.")
+    return false
+  end
 
   for i = 1, #battlefield do
     for j = 1, #battlefield[i] do
@@ -71,20 +69,18 @@ end
 
 local function addPlayerShips(shipsPosition)
   while true do
-      local maxPos = string.char(64 + sizeBattlefield) .. sizeBattlefield
-      print("Enter a position for your ship (Ex: A1, B2... max: " .. maxPos .. "):")
-      local inputPosition = io.read()
+    local maxPos = string.char(64 + sizeBattlefield) .. sizeBattlefield
+    print("Enter a position for your ship (Ex: A1, B2... max: " .. maxPos .. "):")
+    local inputPosition = io.read()
 
-      if validatePositionInBattlefield(inputPosition, playerBattlefield) and (findCoordinate(shipsPosition, inputPosition) == false) then
-          print("Ship placed at position: " .. inputPosition)
-          return inputPosition
-      else
-          if findCoordinate(shipsPosition, inputPosition) then
-            print("Position already taken, enter a new position for the ship.")
-          else
-            print("Invalid position! Please try again.")
-          end
-      end
+    if validatePositionInBattlefield(inputPosition, playerBattlefield) and not (findCoordinate(shipsPosition, inputPosition)) then
+      print("Ship placed at position: " .. inputPosition)
+      return inputPosition
+    elseif findCoordinate(shipsPosition, inputPosition) then
+      print("Position already taken, enter a new position for the ship.")
+    else
+      print("Invalid position! Please try again.")
+    end
   end
 end
 
