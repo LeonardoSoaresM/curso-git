@@ -49,21 +49,65 @@ function getRecipes()
 end
 
 function getRecipesByIngredientName(name)
-
+  local Valor_Desejado = craftsByIngredient[name]
+  local Valor_De_Seguranca = {}
+  return Valor_Desejado or Valor_De_Seguranca
 end
 
 function getAvailableRecipes(ingredients)
+  local availableRecipes = {}
+  local checkedRecipes = {}
+
+  local playerInventory = {}
+  for _, item in ipairs(ingredients) do
+    playerInventory[item.name] = item.count
+  end
+
+  for _, item in ipairs(ingredients) do
+    local recipesList = getRecipesByIngredientName(item.name)
+
+    for _, recipe in ipairs(recipesList) do
+      if not checkedRecipes[recipe.name] then
+        checkedRecipes[recipe.name] = true
+        local canCraft = true
+
+        for _, req in ipairs(recipe.ingredients) do
+          local playerHasCount = playerInventory[req.name] or 0
+          if playerHasCount < req.count then
+            canCraft = false
+          end
+        end
+
+        if canCraft then
+          table.insert(availableRecipes, recipe)
+        end
+      end
+    end
+  end
+
+  return availableRecipes
 end
 
 function main()
   setupCraftsByIngredient()
 
-  getRecAipesByIngredientName("wood")
-  --getAvailableRecipes({
-  --  { name = 'wood', count = 5 },
-  --  { name = 'nail', count = 4 },
-  --  { name = 'paint', count = 30 },
-  --})
+  local playerInventory = {
+    { name = 'wood', count = 5 },
+    { name = 'nail', count = 4 },
+    { name = 'paint', count = 1 },
+    { name = 'stone', count = 2 }
+  }
+
+  local recipes = getAvailableRecipes(playerInventory)
+
+  print("\nRecipes Found:")
+  if #recipes == 0 then
+    print("No recipes available with these items.")
+  else
+    for _, recipe in ipairs(recipes) do
+      print("You can craft: " .. recipe.name)
+    end
+  end
 end
 
 main()
