@@ -10,8 +10,10 @@ end
 
 function registerUsers(names)
   for _,name in ipairs(names) do
-    registerUser(name)
+    local lowerName = string.lower(name)
+    table.insert(users, { id = #users, name = lowerName })
   end
+  table.sort(users, function(a, b) return a.name < b.name end)
 end
 
 function main()
