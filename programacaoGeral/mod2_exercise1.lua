@@ -76,7 +76,7 @@ function table.tostring(t, maxDepth, indent)
         local keyStr = formatKey(key)
         local valueStr = formatValue(value, currentDepth + 1)
 
-        table.insert(lines, nextIndentStr .. keyStr .. " = " .. valueStr)
+        table.insert(lines, table.concat({nextIndentStr, keyStr, " = ", valueStr}))
       end
     end
 
