@@ -49,9 +49,9 @@ function getRecipes()
 end
 
 function getRecipesByIngredientName(name)
-  local Valor_Desejado = craftsByIngredient[name]
-  local Valor_De_Seguranca = {}
-  return Valor_Desejado or Valor_De_Seguranca
+  local requestedValue = craftsByIngredient[name]
+  local fallbackValue = {}
+  return requestedValue or fallbackValue
 end
 
 function getAvailableRecipes(ingredients)
@@ -94,8 +94,7 @@ function main()
   local playerInventory = {
     { name = 'wood', count = 5 },
     { name = 'nail', count = 4 },
-    { name = 'paint', count = 1 },
-    { name = 'stone', count = 2 }
+    { name = 'paint', count = 30 },
   }
 
   local recipes = getAvailableRecipes(playerInventory)
